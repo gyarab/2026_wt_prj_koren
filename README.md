@@ -1,43 +1,70 @@
-# Databáze aut
+# AutoHub – Webová aplikace pro správu a hodnocení aut
 
-Databáze aut je lehká webová aplikace v Djangu, která slouží jako osobní portál pro správu a prohlížení automobilů. Aplikace umožňuje ukládat informace o různých vozidlech, filtrovat je, zobrazovat detailní data a mít vlastní přehledný katalog aut. Veškerá data jsou ukládána v databázi, žádné lokální soubory ani složité servery nejsou potřeba.
+## O projektu
+Cílem projektu **_AutoHub_** je vytvořit interaktivní webovou aplikaci pro správu a hodnocení _aut_ a souvisejících entit, jako jsou _značky_, _modely_, _motorizace_ a _recenze_. Aplikace umožňuje různé role _uživatelů_: anonymní návštěvníky, registrované uživatele a administrátory.
 
-Cílem je vytvořit jednoduché, čisté a přehledné prostředí, kde si uživatel spravuje svůj vlastní seznam automobilů a má možnost snadno sledovat a třídit vozidla podle různých parametrů.
+Anonymní návštěvník může prohlížet seznam _aut_, filtrovat je podle _značky_, _modelu_ nebo _roku výroby_ a číst existující _hodnocení_ a _komentáře_ registrovaných uživatelů. Registrovaný uživatel má navíc možnost přidávat _recenze_, udělovat _hodnocení_ jednotlivým _autům_ a komentovat _recenze_ ostatních uživatelů. Administrátor má plnou kontrolu nad databází – může přidávat nové _auta_, spravovat _značky_, _modely_, mazat nevhodné _komentáře_ a monitorovat _aktivitu uživatelů_.
 
-## Hlavní funkce
-- **Správa katalogu aut:** Přidávání, editace a mazání aut s informacemi o značce, modelu, roku výroby, typu motoru, výkonu a ceně.
-- **Filtrování a vyhledávání:** Snadné vyhledávání aut podle značky, modelu, roku nebo ceny.
-- **Detailní informace:** Zobrazení všech parametrů auta na detailní stránce.
-- **Označení oblíbených aut:** Možnost označit auta, která vás zajímají, pro rychlý přehled.
-- **Responzivní web:** Moderní a přehledné prostředí díky Bootstrapu.
+Databázová struktura je navržena tak, aby podporovala složité vazby: každé _auto_ je propojeno s konkrétní _značkou_ a _modelem_, a může mít jednu nebo více variant _motorizace_. _Hodnocení_ a _recenze_ jsou přiřazeny konkrétnímu _autu_ a _uživateli_, přičemž jeden _uživatel_ může hodnotit jedno _auto_ pouze jednou. _Komentáře_ mohou být vnořené a vztahovat se k recenzi nebo přímo k _autu_.
 
-## Databázový návrh
-- **Car**
-  - `brand` – značka auta
-  - `model` – model auta
-  - `year` – rok výroby
-  - `engine` – typ motoru
-  - `horsepower` – výkon
-  - `price` – cena
-- **User** (Django standardní model)
-  - `username`
-  - `password`
-  - další standardní pole pro autentizaci
+Rozhraní aplikace je koncipováno podle principu _mobile first_, aby bylo použitelné i na menších zařízeních. Klíčové prvky _UI_ zahrnují navigační panel, seznam _aut_ s obrázky, formuláře pro _hodnocení_ a _recenze_ a administrační _dashboard_ pro správu obsahu.
 
-## Architektura
-1. Uživatel přistoupí na webovou stránku a vybere auto ze seznamu.
-2. Django načte data z databáze a zobrazí je pomocí šablon (`home.html`, `about.html`, `detail.html`).
-3. Pro přidání nebo úpravu auta se použije Django admin nebo vlastní formulář.
-4. Data jsou uložena v SQLite (pro jednoduchost) nebo jiné databázi.
+Cílem aplikace je poskytnout komplexní přehled o _aut_ a jejich parametrech, umožnit uživatelům sdílet zkušenosti, objevovat nové _značky_ a _modely_ a zajistit bezpečné prostředí pro _hodnocení_ a _komentáře_.
 
-## Použité technologie
-- **Python / Django** – backend a správa databáze
-- **HTML5, CSS, Bootstrap 5** – responzivní frontend
-- **JavaScript** – interaktivní prvky (např. filtrování a vyhledávání)
-- **SQLite** – jednoduchá databáze pro lokální vývoj
+**Klíčové odborné termíny**: _auto, značka, model, motorizace, hodnocení, recenze, komentář, uživatel, administrátor, databázová struktura, entita, vazba, UI, UX, mobile first, dashboard_.
 
-## Budoucí rozšíření
-- Možnost přidávat fotografie aut
-- Filtry podle více parametrů (např. typ karoserie)
-- Export seznamu aut do PDF nebo Excelu
-- Uživatelské hodnocení aut a komentáře
+---
+
+## User Flow
+Diagram **User Flow** znázorňuje přechody mezi stránkami pro jednotlivé role uživatelů:
+
+- **Homepage** – seznam doporučených aut, vyhledávání podle značky, modelu nebo roku výroby  
+  → **Detail auta** – informace o autě, hodnocení, recenze  
+  → **Přidat recenzi / hodnocení** (pouze registrovaní uživatelé)
+
+- **Registrace / Přihlášení** – formuláře pro nové a stávající uživatele  
+  → po úspěšném přihlášení přesměrování na **Homepage**
+
+- **Uživatelský profil** – přehled vlastních recenzí a hodnocení, možnost editace  
+  → odkaz na **Detail auta**
+
+- **Admin dashboard** – správa aut, značek, modelů, motorizací, komentářů a uživatelů
+
+Navigace mezi stránkami:
+- Homepage ↔ Detail auta  
+- Homepage ↔ Registrace / Přihlášení  
+- Homepage ↔ Uživatelský profil  
+- Admin dashboard ↔ všechny entity (auta, značky, modely, motorizace, uživatelé, komentáře)
+
+---
+
+## Wireframes
+Níže jsou popsané wireframes jednotlivých stránek (mobile first):
+
+### Homepage
+- Hlavička: Logo | Menu: Home, Přihlášení, Registrace, Profil  
+- Seznam aut: obrázek + značka + model + rok + hodnocení  
+- Filtry: značka, model, rok, vyhledávání  
+- Footer: kontakty, informace
+
+### Detail auta
+- Nadpis: Značka + Model + Rok  
+- Obrázek auta, motorizace, výkon, spotřeba, parametry  
+- Hodnocení (hvězdičky)  
+- Recenze, možnost přidat vlastní  
+- Tlačítko „Přidat recenzi“ (pouze registrovaní uživatelé)
+
+### Registrace / Přihlášení
+- Formulář: jméno, email, heslo, potvrzení hesla  
+- Tlačítko Registrovat / Přihlásit  
+- Odkaz: Zapomenuté heslo
+
+### Uživatelský profil
+- Přehled vlastních recenzí a hodnocení  
+- Možnost editace / smazání  
+- Odkaz na detail auta
+
+### Admin Dashboard
+- Menu: Auta, Značky, Modely, Motorizace, Uživatelé, Komentáře  
+- Tabulky s entity + akce (edit, delete, add)  
+- Statistiky aktivity uživatelů
